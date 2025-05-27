@@ -47,11 +47,14 @@ async function getMonthlyAttendance(year: number, month: number) {
 	return { employees, days, attendanceMap, totalAttendanceMap };
 }
 
-export default async function AttendancePage({
-	searchParams,
-}: {
-	searchParams: { month?: string; year?: string };
-}) {
+interface PageProps {
+	searchParams: {
+		month?: string;
+		year?: string;
+	};
+}
+
+export default async function AttendancePage({ searchParams }: PageProps) {
 	const today = toZonedTime(new Date(), timeZone);
 	const year = Number(searchParams.year) || today.getFullYear();
 	const month = Number(searchParams.month) || today.getMonth() + 1;
