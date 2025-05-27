@@ -84,6 +84,9 @@ Prisma.NullTypes = {
  * Enums
  */
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
+  ReadUncommitted: 'ReadUncommitted',
+  ReadCommitted: 'ReadCommitted',
+  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 });
 
@@ -113,6 +116,11 @@ exports.Prisma.AttendanceScalarFieldEnum = {
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
 };
 
 exports.Prisma.NullsOrder = {
@@ -167,7 +175,7 @@ const config = {
   "datasourceNames": [
     "db"
   ],
-  "activeProvider": "sqlite",
+  "activeProvider": "postgresql",
   "inlineDatasources": {
     "db": {
       "url": {
@@ -176,8 +184,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n  // provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id         String   @id @default(cuid())\n  email      String   @unique\n  password   String?\n  role       Role     @default(EMPLOYEE)\n  employeeId String   @unique\n  employee   Employee @relation(fields: [employeeId], references: [id], name: \"UserEmployee\")\n  createdAt  DateTime @default(now())\n  updatedAt  DateTime @updatedAt\n}\n\nmodel Employee {\n  id          String       @id @default(cuid())\n  name        String\n  attendances Attendance[]\n\n  user User? @relation(name: \"UserEmployee\")\n}\n\nmodel Attendance {\n  id         String   @id @default(cuid())\n  date       DateTime\n  status     String // e.g. \"PRESENT\", \"ABSENT\", \"LATE\"\n  employee   Employee @relation(fields: [employeeId], references: [id])\n  employeeId String\n\n  createdAt DateTime @default(now())\n}\n\nenum Role {\n  ADMIN\n  EMPLOYEE\n}\n",
-  "inlineSchemaHash": "743332ead85fc5050a647c000dc9f379f7f31ab2e7a992dcf18b0904fab552a0",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  // provider = \"sqlite\"\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id         String   @id @default(cuid())\n  email      String   @unique\n  password   String?\n  role       Role     @default(EMPLOYEE)\n  employeeId String   @unique\n  employee   Employee @relation(fields: [employeeId], references: [id], name: \"UserEmployee\")\n  createdAt  DateTime @default(now())\n  updatedAt  DateTime @updatedAt\n}\n\nmodel Employee {\n  id          String       @id @default(cuid())\n  name        String\n  attendances Attendance[]\n\n  user User? @relation(name: \"UserEmployee\")\n}\n\nmodel Attendance {\n  id         String   @id @default(cuid())\n  date       DateTime\n  status     String // e.g. \"PRESENT\", \"ABSENT\", \"LATE\"\n  employee   Employee @relation(fields: [employeeId], references: [id])\n  employeeId String\n\n  createdAt DateTime @default(now())\n}\n\nenum Role {\n  ADMIN\n  EMPLOYEE\n}\n",
+  "inlineSchemaHash": "b01fdd1ac465c87b5e5b0e9d819b080d7f3bc49a55ab91477067862b1a36336b",
   "copyEngine": true
 }
 

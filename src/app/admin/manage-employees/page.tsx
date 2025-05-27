@@ -3,6 +3,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import UserRow from "@/components/admin/UserRow";
 
+export const dynamic = "force-dynamic"; // Force dynamic rendering for this page
+
 export default async function EmployeesPage() {
 	const employees = await prisma.employee.findMany({
 		include: { user: true }, // include user info if needed
