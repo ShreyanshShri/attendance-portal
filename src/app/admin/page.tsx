@@ -48,16 +48,18 @@ async function getMonthlyAttendance(year: number, month: number) {
 }
 
 interface PageProps {
-	searchParams: {
+	searchParams: Promise<{
 		month?: string;
 		year?: string;
-	};
+	}>;
 }
 
 export default async function AttendancePage({ searchParams }: PageProps) {
+	const params = await searchParams;
+
 	const today = toZonedTime(new Date(), timeZone);
-	const year = Number(searchParams.year) || today.getFullYear();
-	const month = Number(searchParams.month) || today.getMonth() + 1;
+	const year = Number(params.year) || today.getFullYear();
+	const month = Number(params.month) || today.getMonth() + 1;
 
 	if (month < 1 || month > 12 || year < 2000) {
 		redirect("/attendance"); // fallback if params are invalid
