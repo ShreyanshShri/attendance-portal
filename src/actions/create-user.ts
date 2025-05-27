@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function createEmployee(_prevState: string, formData: FormData) {
@@ -20,5 +21,6 @@ export async function createEmployee(_prevState: string, formData: FormData) {
 		return "Failed to create employee";
 	}
 
+	revalidatePath("/admin/manage-employees");
 	redirect("/admin");
 }

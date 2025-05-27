@@ -40,5 +40,5 @@ export async function punchAttendance(employeeId: string) {
 		},
 	});
 
-	revalidatePath("/attendance"); // to refresh the table view
+	revalidatePath("/admin"); // to refresh the table view
 }
